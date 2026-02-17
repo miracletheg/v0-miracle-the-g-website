@@ -1,0 +1,571 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MONOCHROME TAROT DESIGN SYSTEM
+   
+   Base: High contrast grayscale (vintage printed card aesthetic)
+   Interaction: Reveal colors from tarot cards (violet, magenta, gold, teal)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─── Monochrome Base ─── */
+  --ink: #1a1a1a;
+  --paper: #f8f6f3;
+  --paper-warm: #f5f2ed;
+  --mid-gray: #a8a29e;
+  --light-gray: #e7e5e4;
+
+  /* ─── Theme Tokens ─── */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: #ffffff;
+  --card-foreground: var(--ink);
+  --popover: #ffffff;
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: var(--light-gray);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper-warm);
+  --muted-foreground: #78716c;
+  --accent: var(--mid-gray);
+  --accent-foreground: var(--ink);
+  --border: #d6d3d1;
+  --input: #d6d3d1;
+  --ring: var(--ink);
+  --radius: 2px;
+  --destructive: #991b1b;
+  --destructive-foreground: #ffffff;
+
+  /* ─── Tarot Reveal Colors (on hover/interaction) ─── */
+  --tarot-violet: #7c5cbf;
+  --tarot-magenta: #a855a1;
+  --tarot-gold: #c9a227;
+  --tarot-teal: #2d8a8a;
+  --tarot-indigo: #5b5ea6;
+  --tarot-glow: rgba(124, 92, 191, 0.15);
+
+  /* ─── Sacred Geometry Lines ─── */
+  --geo-stroke: rgba(26, 26, 26, 0.08);
+  --geo-stroke-medium: rgba(26, 26, 26, 0.05);
+  --geo-stroke-light: rgba(26, 26, 26, 0.03);
+  --geo-fill: rgba(26, 26, 26, 0.02);
+
+  /* Sidebar */
+  --sidebar: var(--paper-warm);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--ink);
+  --sidebar-primary-foreground: var(--paper);
+  --sidebar-accent: var(--mid-gray);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ink);
+
+  /* Charts */
+  --chart-1: var(--tarot-violet);
+  --chart-2: var(--tarot-magenta);
+  --chart-3: var(--tarot-teal);
+  --chart-4: var(--tarot-gold);
+  --chart-5: var(--tarot-indigo);
+}
+
+/* ─── Dark Mode: Deep Indigo ─── */
+.dark {
+  --ink: #e8e4ef;
+  --paper: #0d0b14;
+  --paper-warm: #12101a;
+  --mid-gray: #6b6782;
+  --light-gray: #2a2640;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: #16141f;
+  --card-foreground: var(--ink);
+  --popover: #16141f;
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: var(--light-gray);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper-warm);
+  --muted-foreground: #8b86a0;
+  --accent: var(--mid-gray);
+  --accent-foreground: var(--ink);
+  --border: #2f2b3d;
+  --input: #2f2b3d;
+  --ring: var(--ink);
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  /* ─── Tarot Colors: Brighter for dark ─── */
+  --tarot-violet: #a594d0;
+  --tarot-magenta: #c77daa;
+  --tarot-gold: #d4b85a;
+  --tarot-teal: #5cb8a8;
+  --tarot-indigo: #7b80c4;
+  --tarot-glow: rgba(165, 148, 208, 0.2);
+
+  /* ─── Sacred Geometry: Visible on dark ─── */
+  --geo-stroke: rgba(165, 148, 208, 0.1);
+  --geo-stroke-medium: rgba(165, 148, 208, 0.06);
+  --geo-stroke-light: rgba(165, 148, 208, 0.03);
+  --geo-fill: rgba(165, 148, 208, 0.02);
+
+  --sidebar: var(--paper-warm);
+  --sidebar-foreground: var(--ink);
+  --sidebar-border: var(--border);
+}
+
+/* Add smooth theme transition */
+html {
+  scroll-behavior: smooth;
+}
+
+html.transitioning,
+html.transitioning *,
+html.transitioning *::before,
+html.transitioning *::after {
+  transition:
+    background-color 500ms ease-out,
+    color 500ms ease-out,
+    border-color 500ms ease-out,
+    fill 500ms ease-out,
+    stroke 500ms ease-out,
+    box-shadow 500ms ease-out !important;
+}
+
+/* Base transition for theme changes */
+body,
+.bg-background,
+.bg-card,
+.bg-muted,
+.text-foreground,
+.text-muted-foreground,
+.border-border {
+  transition: background-color 400ms ease-out, color 400ms ease-out, border-color 400ms ease-out;
+}
+
+@theme inline {
+  --font-sans: "Inter", "Inter Fallback", system-ui, sans-serif;
+  --font-serif: "Playfair Display", "Playfair Display Fallback", Georgia, serif;
+  --font-mono: "JetBrains Mono", "JetBrains Mono Fallback", monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 1px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Tarot colors exposed to Tailwind */
+  --color-tarot-violet: var(--tarot-violet);
+  --color-tarot-magenta: var(--tarot-magenta);
+  --color-tarot-gold: var(--tarot-gold);
+  --color-tarot-teal: var(--tarot-teal);
+  --color-tarot-indigo: var(--tarot-indigo);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAROT INTERACTIVE STATES
+   Monochrome base → Color reveal on interaction
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tarot-card-frame {
+  transition: transform 280ms ease-out, box-shadow 280ms ease-out, border-color 280ms ease-out;
+}
+
+.tarot-card-frame:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px var(--tarot-glow);
+}
+
+/* Button that reveals color */
+.btn-reveal {
+  position: relative;
+  background: transparent;
+  border: 1px solid var(--foreground);
+  color: var(--foreground);
+  transition: all 250ms ease-out;
+  overflow: hidden;
+}
+
+.btn-reveal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--tarot-violet);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 250ms ease-out;
+  z-index: -1;
+}
+
+.btn-reveal:hover {
+  border-color: var(--tarot-violet);
+  color: white;
+}
+
+.btn-reveal:hover::before {
+  transform: scaleX(1);
+}
+
+/* Link with color underline reveal */
+.link-reveal {
+  position: relative;
+  color: var(--muted-foreground);
+  transition: color 200ms ease-out;
+}
+
+.link-reveal::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--tarot-violet);
+  transition: width 250ms ease-out;
+}
+
+.link-reveal:hover {
+  color: var(--tarot-violet);
+}
+
+.link-reveal:hover::after {
+  width: 100%;
+}
+
+/* Panel with color border reveal */
+.panel-reveal {
+  background: var(--card);
+  border: 1px solid var(--border);
+  transition: all 250ms ease-out;
+}
+
+.panel-reveal:hover {
+  border-color: var(--tarot-violet);
+  box-shadow: 0 0 40px var(--tarot-glow);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GEOMETRY ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes pulse-subtle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes float-gentle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-rotate-slow {
+  animation: rotate-slow 120s linear infinite;
+}
+
+.animate-rotate-reverse {
+  animation: rotate-reverse 90s linear infinite;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 6s ease-in-out infinite;
+}
+
+.animate-float-gentle {
+  animation: float-gentle 8s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ENHANCED BUTTON INTERACTIONS
+   Consistent hover, active, focus states with ripple effects
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Adding ripple effect animation */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* Base button interaction styles */
+.btn-interactive {
+  position: relative;
+  overflow: hidden;
+  transition: all 200ms ease-out;
+  cursor: pointer;
+}
+
+.btn-interactive:hover {
+  transform: translateY(-2px);
+}
+
+.btn-interactive:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-interactive:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Ripple effect on click */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.btn-ripple:active::after {
+  width: 100%;
+  height: 100%;
+  animation: ripple 0.6s ease-out;
+}
+
+/* Primary CTA button with enhanced states */
+.btn-cta {
+  position: relative;
+  overflow: hidden;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 300ms ease-out;
+}
+
+.btn-cta:hover::before {
+  transform: translateX(100%);
+}
+
+.btn-cta:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.btn-cta:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-cta:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+/* Ghost button with subtle hover */
+.btn-ghost-enhanced {
+  position: relative;
+  transition: all 200ms ease-out;
+  cursor: pointer;
+}
+
+.btn-ghost-enhanced::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--muted);
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+  border-radius: inherit;
+}
+
+.btn-ghost-enhanced:hover::before {
+  opacity: 1;
+}
+
+.btn-ghost-enhanced:hover {
+  transform: translateX(4px);
+}
+
+.btn-ghost-enhanced:active {
+  transform: translateX(2px) scale(0.98);
+}
+
+/* Icon button with scale effect */
+.btn-icon-interactive {
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn-icon-interactive:hover {
+  transform: scale(1.1);
+  background: var(--muted);
+}
+
+.btn-icon-interactive:active {
+  transform: scale(0.95);
+}
+
+.btn-icon-interactive:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
+/* Link button with underline animation */
+.btn-link-animated {
+  position: relative;
+  transition: color 200ms ease-out;
+  cursor: pointer;
+}
+
+.btn-link-animated::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-link-animated:hover::after {
+  width: 100%;
+}
+
+/* Ensure all interactive elements have proper cursor */
+button,
+[role="button"],
+[type="button"],
+[type="submit"],
+a,
+select,
+[tabindex]:not([tabindex="-1"]) {
+  cursor: pointer;
+}
+
+button:disabled,
+[role="button"][aria-disabled="true"],
+[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Focus visible states for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Remove focus outline for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
